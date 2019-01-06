@@ -100,6 +100,21 @@ function randomTiles(times){
 	}
 }
 
+function isFinnished(){
+	var previous;
+	var count = 0;
+	for(i =0; i < game.children.length;i++){
+		var current = Number(game.children[i].innerHTML);
+		if (current == 0 || current == previous + 1){
+			count++
+		}
+		previous = current;
+	}
+	if (count == game.children.length){
+		alert("Puzzle Solved");
+	}
+}
 
-initialize(4,4);
-randomTiles(4000);
+
+initialize(3,3);
+randomTiles(2);
