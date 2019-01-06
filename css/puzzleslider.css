@@ -1,0 +1,17 @@
+.puzzle {
+	position: absolute;
+	width:100px;
+	height:100px;
+	background-color:#44ee00;
+}
+
+.gap {
+	position: absolute;
+	width:100px;
+	height:100px;
+}
+
+#SliderPuzzleDiv{
+	background: url('../img/picture1.png') no-repeat;
+	background-size:contain;
+}
