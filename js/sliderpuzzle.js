@@ -6,7 +6,33 @@ var tileheight =100;
 var tilewidth =100;
 var tilepadding = 5;
 
-function move(tile){
+
+function initialize(w,h){
+	width = w;
+	height = h;
+	id = 0;
+	for(var h = 0; h < height;h++){
+		for(var w = 0; w < width;w++){
+			var puzzle = document.createElement("div");   
+			puzzle.setAttribute("class", "puzzle");
+			puzzle.setAttribute("id", id);
+			puzzle.setAttribute("onclick","move(this, isFinished)");
+			puzzle.style["margin-left"] = (tileheight + tilepadding) * w + "px";
+			puzzle.style["margin-top"] = (tileheight + tilepadding) * h + "px";
+			puzzle.innerHTML = id;
+			
+			if (((w+1)*(h+1)) == (height*width)){
+				puzzle.setAttribute("class", "gap");
+				puzzle.innerHTML = "";
+			}
+			game.appendChild(puzzle);
+			id++;
+		}
+	}
+	randomTiles(4000);
+}
+
+function move(tile, callback){
 	if (tile){ //Tile is not null or undefined
 		if (tile.className != "gap"){ //The tile is not the gap tile
 
@@ -17,6 +43,7 @@ function move(tile){
 			if (tileId + 1 < (width*height)){
 				if (game.children[tileId + 1].id == gapTile.id){
 					swaptile(tile,gapTile);
+					callback();
 					return true;
 				}	
 			}
@@ -25,6 +52,7 @@ function move(tile){
 			if ((tileId - 1) >= 0 ){
 				if (game.children[tileId - 1].id == gapTile.id){
 					swaptile(tile,gapTile);
+					callback();
 					return true;
 				}
 			}
@@ -32,6 +60,7 @@ function move(tile){
 			if ((tileId - width) >= 0 ){
 				if (game.children[tileId - width].id == gapTile.id){
 					swaptile(tile,gapTile);
+					callback();
 					return true;
 				}
 			}
@@ -39,6 +68,7 @@ function move(tile){
 			if ((tileId + width) < (width*height)){
 				if (game.children[tileId + width].id  == gapTile.id){
 					swaptile(tile,gapTile);
+					callback();
 					return true;
 				}
 			}
@@ -55,29 +85,7 @@ function swaptile(tileFrom,tileTo){
 	tileFrom.innerHTML = "";
 }
 
-function initialize(w,h){
-	width = w;
-	height = h;
-	id = 0;
-	for(var h = 0; h < height;h++){
-		for(var w = 0; w < width;w++){
-			var puzzle = document.createElement("div");   
-			puzzle.setAttribute("class", "puzzle");
-			puzzle.setAttribute("id", id);
-			puzzle.setAttribute("onclick","move(this)");
-			puzzle.style["margin-left"] = (tileheight + tilepadding) * w + "px";
-			puzzle.style["margin-top"] = (tileheight + tilepadding) * h + "px";
-			puzzle.innerHTML = id;
-			
-			if (((w+1)*(h+1)) == (height*width)){
-				puzzle.setAttribute("class", "gap");
-				puzzle.innerHTML = "";
-			}
-			game.appendChild(puzzle);
-			id++;
-		}
-	}
-}
+
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -92,7 +100,7 @@ function randomTiles(times){
 			gapTileId = Number(game.getElementsByClassName("gap")[0].id);
 			moveTileId = gapTileId + possiblemoves[getRandomInt(0,3)];
 			tile = game.children[moveTileId];
-			if (move(tile)){
+			if (move(tile, getRandomInt)){
 				break;
 			}	
 		}		
@@ -100,7 +108,7 @@ function randomTiles(times){
 	}
 }
 
-function isFinnished(){
+function isFinished(){
 	var previous;
 	var count = 0;
 	for(i =0; i < game.children.length;i++){
@@ -117,4 +125,3 @@ function isFinnished(){
 
 
 initialize(3,3);
-randomTiles(2);
