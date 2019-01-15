@@ -23,13 +23,15 @@ var height;
 var tileheight =100;
 var tilewidth =100;
 var tilepadding = 5;
-
+var randomsteps = 25;
+var moves;
 
 function initialize(w,h){
 	if ((w > 1 && h > 1)){
 		width = w;
 		height = h;
 		id = 0;
+		moves =0;
 		for(var h = 0; h < height;h++){
 			for(var w = 0; w < width;w++){
 				var puzzle = document.createElement("div");   
@@ -48,12 +50,13 @@ function initialize(w,h){
 				id++;
 			}
 		}
-		randomTiles(4000);
+		RandomizePuzzle(randomsteps);
 	}
 	else{
 		console.log("the initialize values needs to be 2 or higher");
 	}
 }
+
 
 function move(tile, callback){
 	if (tile){ //Tile is not null or undefined
@@ -63,16 +66,15 @@ function move(tile, callback){
 			gapTile = game.getElementsByClassName("gap")[0];
 			
 			//right
-			if (tileId + 1 < (width*height)){
+			if (tileId + 1 < (width*height) && tile.style.marginTop == gapTile.style.marginTop){
 				if (game.children[tileId + 1].id == gapTile.id){
 					swaptile(tile,gapTile);
 					callback();
 					return true;
 				}	
 			}
-			
 			//left
-			if ((tileId - 1) >= 0 ){
+			if ((tileId - 1) >= 0 && tile.style.marginTop == gapTile.style.marginTop){
 				if (game.children[tileId - 1].id == gapTile.id){
 					swaptile(tile,gapTile);
 					callback();
@@ -106,9 +108,8 @@ function swaptile(tileFrom,tileTo){
 	tileTo.innerHTML = tileFrom.innerHTML;
 	tileTo.setAttribute("class", "puzzle");
 	tileFrom.innerHTML = "";
+	moves++;
 }
-
-
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -116,14 +117,14 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function randomTiles(times){
+function RandomizePuzzle(times){
 	possiblemoves = [1,-1, width, width * -1];
 	for(i = 0; i < times;i++ ){
 		while(true){
 			gapTileId = Number(game.getElementsByClassName("gap")[0].id);
 			moveTileId = gapTileId + possiblemoves[getRandomInt(0,3)];
 			tile = game.children[moveTileId];
-			if (move(tile, function(){})){ //empty callback on function move. No need to check for a solution.
+			if (move(tile, function(){})){ //empty callback function on move. No need to check for a solution.
 				break;
 			}	
 		}		
