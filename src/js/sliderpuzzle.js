@@ -2,7 +2,7 @@
 Name: Slider Puzzle
 Script URI: https://github.com/mvanetten/SliderPuzzle
 Description: Slider Puzzle based on javascript and html5 only. No extra libraries required like Jquery.
-Version: 1.0.3
+Version: 1.0.5
 Author: Mark van Etten
 Author URI: https://github.com/mvanetten/
 
@@ -17,14 +17,15 @@ Author URI: https://github.com/mvanetten/
 */
 
 var game = document.getElementById("SliderPuzzleDiv");
+
 var width;
 var height;
 
-var tileheight =100;
-var tilewidth =100;
+var tileheight = 100;
+var tilewidth = 100;
 var tilepadding = 5;
-var randomsteps = 25;
-var moves;
+
+var randomsteps = 5;
 
 function initialize(w,h){
 	if ((w > 1 && h > 1)){
@@ -32,18 +33,24 @@ function initialize(w,h){
 		height = h;
 		id = 0;
 		moves =0;
+		
+
+		
+
 		for(var h = 0; h < height;h++){
 			for(var w = 0; w < width;w++){
 				var puzzle = document.createElement("div");   
 				puzzle.setAttribute("class", "puzzle");
 				puzzle.setAttribute("id", id);
+				puzzle.setAttribute("piece", id);
 				puzzle.setAttribute("onclick","move(this, isFinished)");
 				puzzle.style["margin-left"] = (tileheight + tilepadding) * w + "px";
 				puzzle.style["margin-top"] = (tileheight + tilepadding) * h + "px";
-				puzzle.innerHTML = id;
+				puzzle.style["background"] = "url('img/picture1.png') -"+(tileheight + tilepadding) * w+"px -"+(tileheight + tilepadding) * h+"px";
 				
 				if (((w+1)*(h+1)) == (height*width)){
 					puzzle.setAttribute("class", "gap");
+					puzzle.style["background"] = "";
 					puzzle.innerHTML = "";
 				}
 				game.appendChild(puzzle);
@@ -64,7 +71,7 @@ function move(tile, callback){
 
 			tileId = Number(tile.id); //converts from string to int
 			gapTile = game.getElementsByClassName("gap")[0];
-			
+
 			//right
 			if (tileId + 1 < (width*height) && tile.style.marginTop == gapTile.style.marginTop){
 				if (game.children[tileId + 1].id == gapTile.id){
@@ -104,11 +111,20 @@ function move(tile, callback){
 }
 
 function swaptile(tileFrom,tileTo){
+	
+
+	var pieceFrom = Number(tileFrom.getAttribute("piece"));
+	tileFrom.setAttribute("piece", tileTo.getAttribute("piece"));
+	tileTo.setAttribute("piece", pieceFrom);
+	
+	backgroundFrom = tileFrom.style.background;
+	backgroundTo = tileTo.style.background;
+	
+	tileFrom.style.background = backgroundTo;
+	tileTo.style.background = backgroundFrom;
+	
 	tileFrom.setAttribute("class", "gap");
-	tileTo.innerHTML = tileFrom.innerHTML;
 	tileTo.setAttribute("class", "puzzle");
-	tileFrom.innerHTML = "";
-	moves++;
 }
 
 function getRandomInt(min, max) {
@@ -130,13 +146,14 @@ function RandomizePuzzle(times){
 		}		
 		i++
 	}
+	moves = 0;
 }
 
 function isFinished(){
 	var previous;
 	var count = 0;
 	for(i =0; i < game.children.length;i++){
-		var current = Number(game.children[i].innerHTML);
+		var current = Number(game.children[i].getAttribute("piece"));
 		if (current == 0 || current == previous + 1){
 			count++
 		}
@@ -145,6 +162,7 @@ function isFinished(){
 	if (count == game.children.length){
 		alert("Puzzle Solved");
 	}
+	game.
 }
 
-initialize(4,4); // Initialize the game. Make sure there is a div in the HTML file with id "SliderPuzzleDiv"
+initialize(3,3); // Initialize the game. Make sure there is a div in the HTML file with id "SliderPuzzleDiv"

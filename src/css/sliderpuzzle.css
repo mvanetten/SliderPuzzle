@@ -11,7 +11,12 @@
 	height:100px;
 }
 
+#moves{
+		position: absolute;
+	width:100px;
+	height:100px;
+}
+
 #SliderPuzzleDiv{
-	background: url('../img/picture1.png') no-repeat;
 	background-size:contain;
 }
