@@ -2,7 +2,7 @@
 Name: Slider Puzzle
 Script URI: https://github.com/mvanetten/SliderPuzzle
 Description: Slider Puzzle based on javascript and html5 only. No extra libraries required like Jquery.
-Version: 1.0.5
+Version: 1.0.6
 Author: Mark van Etten
 Author URI: https://github.com/mvanetten/
 
@@ -25,7 +25,7 @@ var tileheight = 100;
 var tilewidth = 100;
 var tilepadding = 5;
 
-var randomsteps = 5;
+var randomsteps = 250;
 
 function initialize(w,h){
 	if ((w > 1 && h > 1)){
@@ -162,7 +162,6 @@ function isFinished(){
 	if (count == game.children.length){
 		alert("Puzzle Solved");
 	}
-	game.
 }
 
 initialize(3,3); // Initialize the game. Make sure there is a div in the HTML file with id "SliderPuzzleDiv"
